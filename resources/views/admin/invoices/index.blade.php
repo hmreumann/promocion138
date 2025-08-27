@@ -1,0 +1,220 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Admin - Invoice Management') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    <!-- Flash Messages -->
+                    @if (session('success'))
+                        <div class="mb-4 px-4 py-2 bg-green-100 border-l-4 border-green-500 text-green-700">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    <!-- Filters -->
+                    <div class="mb-6 bg-gray-50 p-4 rounded-lg">
+                        <form method="GET" class="flex flex-wrap gap-4 items-end">
+                            <div class="flex-1 min-w-64">
+                                <label for="search" class="block text-sm font-medium text-gray-700">Search User</label>
+                                <input type="text" name="search" id="search" value="{{ request('search') }}" 
+                                       placeholder="Search by name or email" 
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            </div>
+                            
+                            <div>
+                                <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                                <select name="status" id="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <option value="">All Statuses</option>
+                                    <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
+                                    <option value="waiting_review" {{ request('status') === 'waiting_review' ? 'selected' : '' }}>Waiting Review</option>
+                                    <option value="paid" {{ request('status') === 'paid' ? 'selected' : '' }}>Paid</option>
+                                    <option value="overdue" {{ request('status') === 'overdue' ? 'selected' : '' }}>Overdue</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="user_id" class="block text-sm font-medium text-gray-700">User</label>
+                                <select name="user_id" id="user_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <option value="">All Users</option>
+                                    @foreach ($users as $user)
+                                        <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>
+                                            {{ $user->name }} ({{ $user->email }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+                            <div class="flex gap-2">
+                                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    Filter
+                                </button>
+                                <a href="{{ route('admin.invoices.index') }}" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                                    Clear
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Invoice Stats -->
+                    <div class="mb-6 grid grid-cols-1 md:grid-cols-5 gap-4">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-blue-800">Total Invoices</h3>
+                            <p class="text-2xl font-bold text-blue-600">{{ $invoices->total() }}</p>
+                        </div>
+                        <div class="bg-yellow-50 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-yellow-800">Pending</h3>
+                            <p class="text-2xl font-bold text-yellow-600">{{ $invoices->where('status', 'pending')->count() }}</p>
+                        </div>
+                        <div class="bg-orange-50 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-orange-800">Waiting Review</h3>
+                            <p class="text-2xl font-bold text-orange-600">{{ $invoices->where('status', 'waiting_review')->count() }}</p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-green-800">Paid</h3>
+                            <p class="text-2xl font-bold text-green-600">{{ $invoices->where('status', 'paid')->count() }}</p>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-red-800">Overdue</h3>
+                            <p class="text-2xl font-bold text-red-600">{{ $invoices->filter(fn($invoice) => $invoice->isOverdue())->count() }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Invoices Table -->
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Period</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Paid At</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @forelse ($invoices as $invoice)
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div>
+                                                <div class="text-sm font-medium text-gray-900">{{ $invoice->user->name }}</div>
+                                                <div class="text-sm text-gray-500">{{ $invoice->user->email }}</div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            ${{ number_format($invoice->amount, 2) }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            {{ $invoice->billing_period }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            {{ $invoice->due_date->format('M d, Y') }}
+                                            @if ($invoice->isOverdue())
+                                                <span class="ml-2 px-2 py-1 text-xs font-semibold text-red-800 bg-red-100 rounded-full">Overdue</span>
+                                            @endif
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                                @if($invoice->status === 'paid') bg-green-100 text-green-800
+                                                @elseif($invoice->status === 'pending') bg-yellow-100 text-yellow-800
+                                                @elseif($invoice->status === 'waiting_review') bg-orange-100 text-orange-800
+                                                @else bg-red-100 text-red-800 @endif">
+                                                @if($invoice->status === 'waiting_review') 
+                                                    Waiting Review
+                                                @else 
+                                                    {{ ucfirst($invoice->status) }}
+                                                @endif
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            {{ $invoice->paid_at ? $invoice->paid_at->format('M d, Y H:i') : '-' }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <div class="flex flex-wrap gap-2">
+                                                @if($invoice->receipt_path)
+                                                    <a href="{{ route('invoices.show-receipt', $invoice) }}" 
+                                                       target="_blank"
+                                                       class="text-blue-600 hover:text-blue-900 px-3 py-1 rounded bg-blue-50 hover:bg-blue-100">
+                                                        View Receipt
+                                                    </a>
+                                                @endif
+                                                
+                                                @if ($invoice->status === 'pending')
+                                                    <form method="POST" action="{{ route('admin.invoices.mark-paid', $invoice) }}" class="inline">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit" 
+                                                                class="text-green-600 hover:text-green-900 px-3 py-1 rounded bg-green-50 hover:bg-green-100"
+                                                                onclick="return confirm('Mark this invoice as paid?')">
+                                                            Mark Paid
+                                                        </button>
+                                                    </form>
+                                                @elseif ($invoice->status === 'waiting_review')
+                                                    <form method="POST" action="{{ route('admin.invoices.mark-paid', $invoice) }}" class="inline">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit" 
+                                                                class="text-green-600 hover:text-green-900 px-3 py-1 rounded bg-green-50 hover:bg-green-100"
+                                                                onclick="return confirm('Approve and mark this invoice as paid?')">
+                                                            Approve & Mark Paid
+                                                        </button>
+                                                    </form>
+                                                    <form method="POST" action="{{ route('admin.invoices.mark-pending', $invoice) }}" class="inline">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit" 
+                                                                class="text-yellow-600 hover:text-yellow-900 px-3 py-1 rounded bg-yellow-50 hover:bg-yellow-100"
+                                                                onclick="return confirm('Reject and mark this invoice as pending?')">
+                                                            Reject
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <form method="POST" action="{{ route('admin.invoices.mark-pending', $invoice) }}" class="inline">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit" 
+                                                                class="text-yellow-600 hover:text-yellow-900 px-3 py-1 rounded bg-yellow-50 hover:bg-yellow-100"
+                                                                onclick="return confirm('Mark this invoice as pending?')">
+                                                            Mark Pending
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                                
+                                                <form method="POST" action="{{ route('admin.invoices.destroy', $invoice) }}" class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" 
+                                                            class="text-red-600 hover:text-red-900 px-3 py-1 rounded bg-red-50 hover:bg-red-100"
+                                                            onclick="return confirm('Are you sure you want to delete this invoice? This action cannot be undone.')">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                                            No invoices found matching your criteria.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="mt-6">
+                        {{ $invoices->links() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

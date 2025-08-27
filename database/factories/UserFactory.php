@@ -3,8 +3,6 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -26,10 +24,53 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'password' => 'password',
+            'active' => fake()->boolean(70), // 70% chance of being active
+            'payment_method' => fake()->randomElement(['smsv', 'bank', 'cash', null]),
+            'plan' => fake()->randomElement(['full', 'basic', null]),
         ];
+    }
+
+    /**
+     * Create an active user with SMSV payment method.
+     */
+    public function smsvActive(): static
+    {
+        return $this->state([
+            'active' => true,
+            'payment_method' => 'smsv',
+            'plan' => 'full',
+        ]);
+    }
+
+    /**
+     * Create an inactive user.
+     */
+    public function inactive(): static
+    {
+        return $this->state([
+            'active' => false,
+        ]);
+    }
+
+    /**
+     * Create a user with full plan.
+     */
+    public function fullPlan(): static
+    {
+        return $this->state([
+            'plan' => 'full',
+        ]);
+    }
+
+    /**
+     * Create a user with basic plan.
+     */
+    public function basicPlan(): static
+    {
+        return $this->state([
+            'plan' => 'basic',
+        ]);
     }
 
     /**
