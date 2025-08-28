@@ -20,7 +20,7 @@
                 <div class="relative w-full max-w-6xl px-6">
                     <header class="flex items-center justify-between py-10">
                         <div class="flex items-center space-x-4">
-                            <img src="/logo-promocion138.svg" alt="Promoción 138" class="w-16 h-16" />
+                            <x-application-logo class="w-16 h-16 text-yellow-400" />
                             <div>
                                 <h1 class="text-2xl font-bold text-yellow-400">Promoción 138</h1>
                                 <p class="text-blue-200">Escuela Naval Militar</p>
