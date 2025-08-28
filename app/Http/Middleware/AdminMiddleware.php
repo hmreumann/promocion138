@@ -17,7 +17,7 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (! Auth::check() || !in_array(Auth::user()->email, [
-            'cyberalex_121@hotmail.com',
+            'leonoraviladau@gmail.com',
             'emaruhl@hotmail.com',
             'duc_cn@hotmail.com',
             'nicoalfonso50@hotmail.com',
