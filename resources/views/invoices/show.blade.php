@@ -1,13 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
-            {{ __('Dashboard') }}
+            Factura #{{ str_pad($invoice->id, 6, '0', STR_PAD_LEFT) }}
         </h2>
     </x-slot>
 
-    <div class="max-w-4xl p-8 mx-auto">
-        <h2 class="mb-6 text-xl font-semibold">Factura #{{ str_pad($invoice->id, 6, '0', STR_PAD_LEFT) }}</h2>
-
+    <div class="max-w-4xl p-4 mx-auto md:p-8">
         <!-- Invoice Details -->
         <div class="grid gap-8 mb-8 md:grid-cols-2">
             <div>
@@ -34,28 +32,28 @@
         </div>
 
         <!-- Amount -->
-        <div class="p-6 mb-8 text-center border-l-4 border-blue-500 rounded-lg bg-slate-100">
-            <div class="mb-2 text-4xl font-bold text-blue-900">${{ number_format($invoice->amount, 0, ',', '.') }}</div>
-            <p class="font-semibold">{{ $invoice->description }}</p>
+        <div class="p-4 mb-8 text-center border-l-4 border-blue-500 rounded-lg md:p-6 bg-slate-100">
+            <div class="mb-2 text-2xl font-bold text-blue-900 md:text-4xl">${{ number_format($invoice->amount, 0, ',', '.') }}</div>
+            <p class="text-sm font-semibold md:text-base">{{ $invoice->description }}</p>
         </div>
 
         <!-- Payment Instructions -->
         @if($invoice->status === 'pending')
-            <div class="p-6 mb-8 border rounded-lg bg-amber-50 border-amber-500">
-                <h3 class="flex items-center gap-2 mb-4 text-lg font-semibold text-amber-800">💰 Instrucciones de Pago</h3>
+            <div class="p-4 mb-8 border rounded-lg md:p-6 bg-amber-50 border-amber-500">
+                <h3 class="flex items-center gap-2 mb-4 text-base font-semibold md:text-lg text-amber-800">💰 Instrucciones de Pago</h3>
 
                 <div class="p-4 mb-4 bg-white border-l-4 rounded-lg border-amber-500">
                     <h4 class="mb-2 font-semibold text-blue-900">Paso 1: Realizar la Transferencia</h4>
                     <p>Transfiera al siguiente CBU:</p>
 
-                    <div class="flex items-center gap-2 mt-2">
-                        <div id="cbu-code" class="px-3 py-2 font-mono tracking-wide text-white bg-blue-900 rounded select-all">
+                    <div class="flex flex-col gap-2 mt-2 sm:flex-row sm:items-center">
+                        <div id="cbu-code" class="px-3 py-2 font-mono text-sm tracking-wide text-white break-all bg-blue-900 rounded select-all sm:text-base">
                             3220001805000013390012
                         </div>
                         <button
                             onclick="copyCBU()"
-                            class="px-3 py-2 text-sm font-semibold text-white transition rounded bg-amber-500 hover:bg-amber-600">
-                            Copiar
+                            class="px-4 py-2 text-sm font-semibold text-white transition rounded bg-amber-500 hover:bg-amber-600 whitespace-nowrap">
+                            Copiar CBU
                         </button>
                     </div>
 
@@ -69,21 +67,21 @@
                     <h4 class="mb-2 font-semibold text-blue-900">Paso 2: Incluir el Número de Referencia</h4>
                     <p>Debe poner el siguiente número:</p>
 
-                    <div class="flex items-center gap-2 mt-2">
-                        <div id="reference-code" class="px-3 py-2 font-mono tracking-wide text-white bg-blue-900 rounded select-all">
+                    <div class="flex flex-col gap-2 mt-2 sm:flex-row sm:items-center">
+                        <div id="reference-code" class="px-3 py-2 font-mono text-sm tracking-wide text-white bg-blue-900 rounded select-all sm:text-base">
                             1054747110
                         </div>
                         <button
                             onclick="copyReference()"
-                            class="px-3 py-2 text-sm font-semibold text-white transition rounded bg-amber-500 hover:bg-amber-600">
-                            Copiar
+                            class="px-4 py-2 text-sm font-semibold text-white transition rounded bg-amber-500 hover:bg-amber-600 whitespace-nowrap">
+                            Copiar Referencia
                         </button>
                     </div>
 
                     <!-- Mensaje oculto -->
                     <p id="reference-message" class="hidden mt-2 text-sm font-medium text-green-600">✅ Copiado al portapapeles</p>
 
-                    <div class="p-3 mt-3 font-semibold text-red-800 bg-red-100 border border-red-400 rounded">
+                    <div class="p-3 mt-3 text-sm font-semibold text-red-800 bg-red-100 border border-red-400 rounded md:text-base">
                         ⚠️ MUY IMPORTANTE: Sin este número no podremos identificar su pago.
                     </div>
                 </div>
@@ -102,9 +100,9 @@
             </div>
 
             <!-- Upload Section -->
-            <div class="p-6 text-center border rounded-lg bg-sky-50 border-sky-500">
-                <h3 class="mb-2 text-lg font-semibold text-sky-900">📤 Subir Comprobante</h3>
-                <p>Una vez realizada la transferencia, suba el comprobante para procesar su pago:</p>
+            <div class="p-4 text-center border rounded-lg md:p-6 bg-sky-50 border-sky-500">
+                <h3 class="mb-2 text-base font-semibold md:text-lg text-sky-900">📤 Subir Comprobante</h3>
+                <p class="text-sm md:text-base">Una vez realizada la transferencia, suba el comprobante para procesar su pago:</p>
 
                 @if(session('success'))
                     <div class="p-3 mt-4 border rounded-lg bg-emerald-100 border-emerald-500 text-emerald-800">✅ {{ session('success') }}</div>
@@ -134,7 +132,7 @@
                     <div class="p-3 mt-4 border rounded-lg bg-sky-100 border-sky-500 text-sky-900">
                         📄 <strong>Comprobante subido:</strong> Está siendo procesado. Recibirá confirmación por email.
                         <div class="mt-2">
-                            <a href="{{ route('invoices.show-receipt', $invoice) }}" 
+                            <a href="{{ route('invoices.show-receipt', $invoice) }}"
                                target="_blank"
                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
                                 👁️ Ver Comprobante
@@ -144,12 +142,12 @@
                 @endif
             </div>
         @elseif($invoice->status === 'waiting_review')
-            <div class="p-6 mb-8 text-center border rounded-lg bg-orange-100 border-orange-500">
+            <div class="p-6 mb-8 text-center bg-orange-100 border border-orange-500 rounded-lg">
                 <h3 class="mb-2 text-lg font-semibold text-orange-800">⏳ Comprobante En Revisión</h3>
-                <p class="text-orange-700 mb-4">Su comprobante de pago está siendo revisado por nuestro equipo. Recibirá una confirmación por email una vez procesado.</p>
+                <p class="mb-4 text-orange-700">Su comprobante de pago está siendo revisado por nuestro equipo. Recibirá una confirmación por email una vez procesado.</p>
                 @if($invoice->receipt_path)
                     <div class="mt-4">
-                        <a href="{{ route('invoices.show-receipt', $invoice) }}" 
+                        <a href="{{ route('invoices.show-receipt', $invoice) }}"
                            target="_blank"
                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-lg hover:bg-orange-700">
                             👁️ Ver Comprobante Subido
@@ -163,7 +161,7 @@
                 <p class="text-emerald-700">Su pago fue procesado exitosamente el {{ $invoice->paid_at?->format('d/m/Y') }}.</p>
                 @if($invoice->receipt_path)
                     <div class="mt-4">
-                        <a href="{{ route('invoices.show-receipt', $invoice) }}" 
+                        <a href="{{ route('invoices.show-receipt', $invoice) }}"
                            target="_blank"
                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700">
                             👁️ Ver Comprobante de Pago
