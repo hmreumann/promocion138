@@ -1,16 +1,16 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="text-xl font-semibold leading-tight text-gray-800">
             {{ __('Facturas') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div class="mb-6">
-                        <h3 class="text-lg font-medium text-gray-900 mb-2">Mis Facturas</h3>
+                        <h3 class="mb-2 text-lg font-medium text-gray-900">Mis Facturas</h3>
                         <p class="text-sm text-gray-600">Historial de cuotas mensuales - Promoción 138</p>
                     </div>
 
@@ -19,22 +19,22 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                             Factura
                                         </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                             Período
                                         </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                             Monto
                                         </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                             Estado
                                         </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                             Vencimiento
                                         </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                             Acciones
                                         </th>
                                     </tr>
@@ -42,10 +42,10 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @foreach($invoices as $invoice)
                                         <tr class="hover:bg-gray-50">
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                                                 <div class="flex items-center">
-                                                    <div class="flex-shrink-0 h-10 w-10">
-                                                        <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                                    <div class="flex-shrink-0 w-10 h-10">
+                                                        <div class="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full">
                                                             <span class="text-xs font-bold text-blue-800">138</span>
                                                         </div>
                                                     </div>
@@ -59,11 +59,11 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                                                 <span class="font-mono">{{ $invoice->billing_period }}</span>
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                <span class="font-bold text-lg">${{ number_format($invoice->amount, 0, ',', '.') }}</span>
+                                            <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                                                <span class="text-lg font-bold">${{ number_format($invoice->amount, 2, ',', '.') }}</span>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 @switch($invoice->status)
@@ -101,7 +101,7 @@
                                                         @break
                                                 @endswitch
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                                                 <div class="{{ $invoice->due_date < now() && $invoice->status === 'pending' ? 'text-red-600 font-medium' : 'text-gray-900' }}">
                                                     {{ $invoice->due_date->format('d/m/Y') }}
                                                 </div>
@@ -111,46 +111,46 @@
                                                     </div>
                                                 @endif
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                <a href="{{ route('invoices.show', $invoice) }}" 
-                                                   class="text-blue-600 hover:text-blue-900 mr-3">
+                                            <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
+                                                <a href="{{ route('invoices.show', $invoice) }}"
+                                                   class="mr-3 text-blue-600 hover:text-blue-900">
                                                     Ver
                                                 </a>
                                                 @if($invoice->status === 'pending')
                                                     @if($invoice->receipt_path)
                                                         <div class="flex flex-col gap-1">
-                                                            <span class="text-orange-600 text-xs">
+                                                            <span class="text-xs text-orange-600">
                                                                 Comprobante subido
                                                             </span>
-                                                            <a href="{{ route('invoices.show-receipt', $invoice) }}" 
+                                                            <a href="{{ route('invoices.show-receipt', $invoice) }}"
                                                                target="_blank"
-                                                               class="text-blue-600 hover:text-blue-900 text-xs">
+                                                               class="text-xs text-blue-600 hover:text-blue-900">
                                                                 Ver Comprobante
                                                             </a>
                                                         </div>
                                                     @else
-                                                        <a href="{{ route('invoices.show', $invoice) }}#upload" 
-                                                           class="text-green-600 hover:text-green-900 text-xs">
+                                                        <a href="{{ route('invoices.show', $invoice) }}#upload"
+                                                           class="text-xs text-green-600 hover:text-green-900">
                                                             Pagar
                                                         </a>
                                                     @endif
                                                 @elseif($invoice->status === 'waiting_review')
                                                     <div class="flex flex-col gap-1">
-                                                        <span class="text-orange-600 text-xs">
+                                                        <span class="text-xs text-orange-600">
                                                             En revisión
                                                         </span>
                                                         @if($invoice->receipt_path)
-                                                            <a href="{{ route('invoices.show-receipt', $invoice) }}" 
+                                                            <a href="{{ route('invoices.show-receipt', $invoice) }}"
                                                                target="_blank"
-                                                               class="text-blue-600 hover:text-blue-900 text-xs">
+                                                               class="text-xs text-blue-600 hover:text-blue-900">
                                                                 Ver Comprobante
                                                             </a>
                                                         @endif
                                                     </div>
                                                 @elseif($invoice->status === 'paid' && $invoice->receipt_path)
-                                                    <a href="{{ route('invoices.show-receipt', $invoice) }}" 
+                                                    <a href="{{ route('invoices.show-receipt', $invoice) }}"
                                                        target="_blank"
-                                                       class="text-blue-600 hover:text-blue-900 text-xs">
+                                                       class="text-xs text-blue-600 hover:text-blue-900">
                                                         Ver Comprobante
                                                     </a>
                                                 @endif
@@ -167,30 +167,30 @@
                         </div>
 
                         <!-- Summary Statistics -->
-                        <div class="mt-8 grid grid-cols-1 md:grid-cols-5 gap-4">
-                            <div class="bg-blue-50 p-4 rounded-lg">
+                        <div class="grid grid-cols-1 gap-4 mt-8 md:grid-cols-5">
+                            <div class="p-4 rounded-lg bg-blue-50">
                                 <div class="text-2xl font-bold text-blue-600">{{ $invoices->total() }}</div>
                                 <div class="text-sm text-blue-600">Total</div>
                             </div>
-                            <div class="bg-yellow-50 p-4 rounded-lg">
+                            <div class="p-4 rounded-lg bg-yellow-50">
                                 <div class="text-2xl font-bold text-yellow-600">
                                     {{ $invoices->where('status', 'pending')->count() }}
                                 </div>
                                 <div class="text-sm text-yellow-600">Pendientes</div>
                             </div>
-                            <div class="bg-orange-50 p-4 rounded-lg">
+                            <div class="p-4 rounded-lg bg-orange-50">
                                 <div class="text-2xl font-bold text-orange-600">
                                     {{ $invoices->where('status', 'waiting_review')->count() }}
                                 </div>
                                 <div class="text-sm text-orange-600">En Revisión</div>
                             </div>
-                            <div class="bg-green-50 p-4 rounded-lg">
+                            <div class="p-4 rounded-lg bg-green-50">
                                 <div class="text-2xl font-bold text-green-600">
                                     {{ $invoices->where('status', 'paid')->count() }}
                                 </div>
                                 <div class="text-sm text-green-600">Pagadas</div>
                             </div>
-                            <div class="bg-red-50 p-4 rounded-lg">
+                            <div class="p-4 rounded-lg bg-red-50">
                                 <div class="text-2xl font-bold text-red-600">
                                     {{ $invoices->filter(function($invoice) { return $invoice->isOverdue(); })->count() }}
                                 </div>
@@ -198,13 +198,13 @@
                             </div>
                         </div>
                     @else
-                        <div class="text-center py-12">
-                            <div class="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                        <div class="py-12 text-center">
+                            <div class="flex items-center justify-center w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full">
                                 <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>
                             </div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-2">No hay facturas generadas</h3>
+                            <h3 class="mb-2 text-lg font-medium text-gray-900">No hay facturas generadas</h3>
                             <p class="text-gray-500">Las facturas se generan automáticamente el primer día de cada mes.</p>
                         </div>
                     @endif

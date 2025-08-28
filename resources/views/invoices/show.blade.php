@@ -33,7 +33,7 @@
 
         <!-- Amount -->
         <div class="p-4 mb-8 text-center border-l-4 border-blue-500 rounded-lg md:p-6 bg-slate-100">
-            <div class="mb-2 text-2xl font-bold text-blue-900 md:text-4xl">${{ number_format($invoice->amount, 0, ',', '.') }}</div>
+            <div class="mb-2 text-2xl font-bold text-blue-900 md:text-4xl">${{ number_format($invoice->amount, 2, ',', '.') }}</div>
             <p class="text-sm font-semibold md:text-base">{{ $invoice->description }}</p>
         </div>
 

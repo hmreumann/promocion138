@@ -7,12 +7,12 @@ Se ha generado una nueva factura para su cuota mensual de la Promoción 138.
 
 ## 📋 Detalles de la Factura
 
-**Número de Factura:** #{{ str_pad($invoice->id, 6, '0', STR_PAD_LEFT) }}  
-**Fecha de Emisión:** {{ $invoice->invoice_date->format('d/m/Y') }}  
-**Fecha de Vencimiento:** {{ $invoice->due_date->format('d/m/Y') }}  
-**Período de Facturación:** {{ $invoice->billing_period }}  
-**Concepto:** {{ $invoice->description }}  
-**Importe:** **${{ number_format($invoice->amount, 0, ',', '.') }}**
+**Número de Factura:** #{{ str_pad($invoice->id, 6, '0', STR_PAD_LEFT) }}
+**Fecha de Emisión:** {{ $invoice->invoice_date->format('d/m/Y') }}
+**Fecha de Vencimiento:** {{ $invoice->due_date->format('d/m/Y') }}
+**Período de Facturación:** {{ $invoice->billing_period }}
+**Concepto:** {{ $invoice->description }}
+**Importe:** **${{ number_format($invoice->amount, 2, ',', '.') }}**
 
 @component('mail::button', ['url' => $invoiceUrl])
 Ver Factura e Instrucciones de Pago
@@ -21,16 +21,16 @@ Ver Factura e Instrucciones de Pago
 @component('mail::panel')
 ## 📋 Instrucciones Importantes:
 
-Para realizar el pago, haga clic en el botón anterior para ver las instrucciones detalladas.  
+Para realizar el pago, haga clic en el botón anterior para ver las instrucciones detalladas.
 **Es muy importante incluir el código de referencia en la transferencia.**
 @endcomponent
 
 ---
 
-*"Inmare Pro Patria Luctati Honore"*  
+*"Inmare Pro Patria Luctati Honore"*
 *En el Mar y Por la Patria Lucharemos con Honor*
 
-Saludos cordiales,  
+Saludos cordiales,
 **Promoción 138 - Escuela Naval Militar**
 
 ---

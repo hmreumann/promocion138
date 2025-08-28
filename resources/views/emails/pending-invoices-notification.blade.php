@@ -8,7 +8,7 @@ Le recordamos que tiene **{{ $pendingInvoices->count() }} factura(s) pendiente(s
 @component('mail::panel')
 ## 📋 Resumen de Facturas Pendientes
 
-**Total pendiente: ${{ number_format($pendingInvoices->sum('amount'), 0, ',', '.') }}**
+**Total pendiente: ${{ number_format($pendingInvoices->sum('amount'), 2, ',', '.') }}**
 @endcomponent
 
 ## Detalle de Facturas:
@@ -26,10 +26,10 @@ Le recordamos que tiene **{{ $pendingInvoices->count() }} factura(s) pendiente(s
 🔴 **VENCIDA**
 @endif
 
-**Período:** {{ $invoice->billing_period }}  
-**Fecha de Vencimiento:** {{ $invoice->due_date->format('d/m/Y') }}  
-**Concepto:** {{ $invoice->description }}  
-**Importe:** **${{ number_format($invoice->amount, 0, ',', '.') }}**
+**Período:** {{ $invoice->billing_period }}
+**Fecha de Vencimiento:** {{ $invoice->due_date->format('d/m/Y') }}
+**Concepto:** {{ $invoice->description }}
+**Importe:** **${{ number_format($invoice->amount, 2, ',', '.') }}**
 
 @if($isOverdue && !$isWaitingReview)
 ⚠️ **Vencida hace:** {{ $invoice->due_date->diffForHumans() }}
@@ -50,7 +50,7 @@ Ver Mis Facturas y Realizar Pagos
 ## ⚠️ Instrucciones Importantes:
 
 - Haga clic en el botón anterior para acceder al sistema y ver las instrucciones de pago
-- Si ya realizó el pago, suba el comprobante para agilizar la verificación  
+- Si ya realizó el pago, suba el comprobante para agilizar la verificación
 - En caso de inconvenientes, contacte con la administración
 @if($pendingInvoices->where('status', 'waiting_review')->count() > 0)
 - **Facturas en revisión:** Sus pagos están siendo procesados
@@ -59,10 +59,10 @@ Ver Mis Facturas y Realizar Pagos
 
 ---
 
-*"Inmare Pro Patria Luctati Honore"*  
+*"Inmare Pro Patria Luctati Honore"*
 *En el Mar y Por la Patria Lucharemos con Honor*
 
-Saludos cordiales,  
+Saludos cordiales,
 **Promoción 138 - Escuela Naval Militar**
 
 ---
