@@ -37,7 +37,7 @@ class TestEmail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'emails.test-email',
+            markdown: 'emails.test-email',
         );
     }
 

@@ -34,7 +34,7 @@ class InvoiceCreated extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'emails.invoice-created',
+            markdown: 'emails.invoice-created',
             with: [
                 'invoice' => $this->invoice,
                 'user' => $this->invoice->user,

@@ -40,7 +40,7 @@ class PendingInvoicesNotification extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.pending-invoices-notification',
+            markdown: 'emails.pending-invoices-notification',
         );
     }
 
