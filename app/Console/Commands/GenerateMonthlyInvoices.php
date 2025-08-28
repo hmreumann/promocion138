@@ -63,7 +63,7 @@ class GenerateMonthlyInvoices extends Command
             }
 
             // Calculate amount based on plan
-            $amount = $this->calculateAmount($user->plan);
+            $amount = $this->calculateAmount($user->plan, $user->cents);
 
             // Create the invoice
             $invoice = Invoice::create([
@@ -93,12 +93,14 @@ class GenerateMonthlyInvoices extends Command
         return self::SUCCESS;
     }
 
-    private function calculateAmount(string $plan): float
+    private function calculateAmount(string $plan, ?float $cents = 0): float
     {
-        return match ($plan) {
+        $amount = match ($plan) {
             'full' => 27000.00,
             'basic' => 10800.00,
             default => 27000.00,
         };
+
+        return $amount + $cents;
     }
 }
