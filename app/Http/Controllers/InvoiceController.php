@@ -47,6 +47,8 @@ class InvoiceController extends Controller
             ->cc([
                 'cuentascorrientesrrbb@smsv.com.ar',
                 'promociones@smsv.com.ar',
+                'emaruhl@hotmail.com',
+                'duc_cn@hotmail.com'
             ])
             ->send(new PaymentNotification($invoice));
 
