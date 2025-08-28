@@ -167,6 +167,6 @@ class GenerateMonthlyInvoices extends Command
             default => 27000.00,
         };
 
-        return $amount + $cents;
+        return $amount + $cents/100;
     }
 }
