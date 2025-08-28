@@ -26,10 +26,10 @@ Le recordamos que tiene **{{ $pendingInvoices->count() }} factura(s) pendiente(s
 🔴 **VENCIDA**
 @endif
 
-**Período:** {{ $invoice->billing_period }}
-**Fecha de Vencimiento:** {{ $invoice->due_date->format('d/m/Y') }}
-**Concepto:** {{ $invoice->description }}
-**Importe:** **${{ number_format($invoice->amount, 2, ',', '.') }}**
+- **Período:** {{ $invoice->billing_period }}
+- **Fecha de Vencimiento:** {{ $invoice->due_date->format('d/m/Y') }}
+- **Concepto:** {{ $invoice->description }}
+- **Importe:** **${{ number_format($invoice->amount, 2, ',', '.') }}**
 
 @if($isOverdue && !$isWaitingReview)
 ⚠️ **Vencida hace:** {{ $invoice->due_date->diffForHumans() }}

@@ -16,7 +16,15 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! Auth::check() || Auth::user()->email !== 'hmreumann@hotmail.com') {
+        if (! Auth::check() || !in_array(Auth::user()->email, [
+            'cyberalex_121@hotmail.com',
+            'emaruhl@hotmail.com',
+            'duc_cn@hotmail.com',
+            'nicoalfonso50@hotmail.com',
+            'walter_868@hotmail.com',
+            'hmreumann@hotmail.com'
+            ])
+        ) {
             abort(403, 'Access denied');
         }
 

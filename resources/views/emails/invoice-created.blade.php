@@ -7,12 +7,12 @@ Se ha generado una nueva factura para su cuota mensual de la Promoción 138.
 
 ## 📋 Detalles de la Factura
 
-**Número de Factura:** #{{ str_pad($invoice->id, 6, '0', STR_PAD_LEFT) }}
-**Fecha de Emisión:** {{ $invoice->invoice_date->format('d/m/Y') }}
-**Fecha de Vencimiento:** {{ $invoice->due_date->format('d/m/Y') }}
-**Período de Facturación:** {{ $invoice->billing_period }}
-**Concepto:** {{ $invoice->description }}
-**Importe:** **${{ number_format($invoice->amount, 2, ',', '.') }}**
+- **Número de Factura:** #{{ str_pad($invoice->id, 6, '0', STR_PAD_LEFT) }}
+- **Fecha de Emisión:** {{ $invoice->invoice_date->format('d/m/Y') }}
+- **Fecha de Vencimiento:** {{ $invoice->due_date->format('d/m/Y') }}
+- **Período de Facturación:** {{ $invoice->billing_period }}
+- **Concepto:** {{ $invoice->description }}
+- **Importe:** **${{ number_format($invoice->amount, 2, ',', '.') }}**
 
 @component('mail::button', ['url' => $invoiceUrl])
 Ver Factura e Instrucciones de Pago
