@@ -8,7 +8,7 @@ Le recordamos que tiene **{{ $pendingInvoices->count() }} factura(s) pendiente(s
 @component('mail::panel')
 ## 📋 Resumen de Facturas Pendientes
 
-**Total pendiente: ${{ number_format($pendingInvoices->sum('amount'), 2, ',', '.') }}**
+**Total pendiente: ${{ number_format($pendingInvoices->sum('amount'), 0, ',', '.') }}**
 @endcomponent
 
 ## Detalle de Facturas:
@@ -28,7 +28,6 @@ Le recordamos que tiene **{{ $pendingInvoices->count() }} factura(s) pendiente(s
 
 - **Período:** {{ $invoice->billing_period }}
 - **Fecha de Vencimiento:** {{ $invoice->due_date->format('d/m/Y') }}
-- **Concepto:** {{ $invoice->description }}
 - **Importe:** **${{ number_format($invoice->amount, 2, ',', '.') }}**
 
 @if($isOverdue && !$isWaitingReview)

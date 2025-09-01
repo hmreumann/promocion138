@@ -85,6 +85,7 @@ class GenerateMonthlyInvoices extends Command
 
             // Send email notification
             Mail::to($user->email)->send(new InvoiceCreated($invoice));
+            sleep(1);
 
             $invoicesCreated++;
         }

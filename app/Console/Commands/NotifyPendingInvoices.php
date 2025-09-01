@@ -58,6 +58,7 @@ class NotifyPendingInvoices extends Command
             if ($user->invoices->isNotEmpty()) {
                 // Send notification email
                 Mail::to($user)->send(new PendingInvoicesNotification($user, $user->invoices));
+                sleep(1);
 
                 $this->info("Notification sent to {$user->name} ({$user->email}) - {$user->invoices->count()} pending invoice(s)");
                 $notificationsSent++;
