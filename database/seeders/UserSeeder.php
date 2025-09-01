@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             ['name' => 'ALFONSO NICOLAS EZEQUIEL', 'email' => 'nicoalfonso50@hotmail.com', 'active' => false, 'payment_method' => 'transfer', 'plan' => 'full', 'cents' => 2],
             ['name' => 'ANZOATEGUI MARIANO', 'email' => 'marianz17@hotmail.com', 'active' => false, 'payment_method' => null, 'plan' => null],
             ['name' => 'AVALOS MATIAS EXEQUIEL', 'email' => 'avalosmatias73@gmail.com', 'active' => false, 'payment_method' => null, 'plan' => null],
-            ['name' => 'AVILA DAU LEONOR ALEJANDRA', 'email' => 'cyberalex_121@hotmail.com', 'active' => true, 'payment_method' => 'siaf', 'plan' => 'full'],
+            ['name' => 'AVILA DAU LEONOR ALEJANDRA', 'email' => 'leonoraviladau@gmail.com', 'active' => true, 'payment_method' => 'siaf', 'plan' => 'full'],
             ['name' => 'AVILA WALTER ANDRES', 'email' => 'walter_868@hotmail.com', 'active' => true, 'payment_method' => 'transfer', 'plan' => 'full', 'cents' => 3],
             ['name' => 'AYALA RUBEN DARIO', 'email' => 'rdaguitar@hotmail.com', 'active' => true, 'payment_method' => 'siaf', 'plan' => 'full'],
             ['name' => 'BARRAGAN EMILIANO MARTIN', 'email' => 'grintri@hotmail.com', 'active' => false, 'payment_method' => null, 'plan' => null],
