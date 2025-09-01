@@ -19,6 +19,11 @@ class InvoiceOwnerMiddleware
     {
         $invoice = $request->route('invoice');
         
+        // Allow admins to access any invoice
+        if (Auth::check() && in_array(Auth::user()->email, config('admins.emails'))) {
+            return $next($request);
+        }
+        
         if ($invoice instanceof Invoice && $invoice->user_id !== Auth::id()) {
             abort(403, 'No tienes permiso para acceder a esta factura.');
         }
