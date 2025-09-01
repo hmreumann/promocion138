@@ -155,6 +155,15 @@
                                                             Mark Paid
                                                         </button>
                                                     </form>
+                                                    <form method="POST" action="{{ route('admin.invoices.mark-waiting-review', $invoice) }}" class="inline">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit" 
+                                                                class="text-orange-600 hover:text-orange-900 px-3 py-1 rounded bg-orange-50 hover:bg-orange-100"
+                                                                onclick="return confirm('Mark this invoice as waiting review?')">
+                                                            Mark Waiting Review
+                                                        </button>
+                                                    </form>
                                                 @elseif ($invoice->status === 'waiting_review')
                                                     <form method="POST" action="{{ route('admin.invoices.mark-paid', $invoice) }}" class="inline">
                                                         @csrf
@@ -184,6 +193,17 @@
                                                             Mark Pending
                                                         </button>
                                                     </form>
+                                                    @if ($invoice->status === 'paid')
+                                                        <form method="POST" action="{{ route('admin.invoices.mark-waiting-review', $invoice) }}" class="inline">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit" 
+                                                                    class="text-orange-600 hover:text-orange-900 px-3 py-1 rounded bg-orange-50 hover:bg-orange-100"
+                                                                    onclick="return confirm('Mark this invoice as waiting review?')">
+                                                                Mark Waiting Review
+                                                            </button>
+                                                        </form>
+                                                    @endif
                                                 @endif
                                                 
                                                 <form method="POST" action="{{ route('admin.invoices.destroy', $invoice) }}" class="inline">

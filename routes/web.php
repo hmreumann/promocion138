@@ -39,6 +39,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::patch('invoices/{invoice}/mark-pending', [AdminInvoiceController::class, 'markAsPending'])
         ->name('invoices.mark-pending');
 
+    Route::patch('invoices/{invoice}/mark-waiting-review', [AdminInvoiceController::class, 'markAsWaitingReview'])
+        ->name('invoices.mark-waiting-review');
+
     Route::delete('invoices/{invoice}', [AdminInvoiceController::class, 'destroy'])
         ->name('invoices.destroy');
 });

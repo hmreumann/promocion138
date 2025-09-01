@@ -53,6 +53,13 @@ class InvoiceController extends Controller
         return redirect()->back()->with('success', 'Invoice marked as pending successfully.');
     }
 
+    public function markAsWaitingReview(Invoice $invoice): RedirectResponse
+    {
+        $invoice->markAsWaitingReview();
+
+        return redirect()->back()->with('success', 'Invoice marked as waiting review successfully.');
+    }
+
     public function destroy(Invoice $invoice): RedirectResponse
     {
         $invoice->delete();
