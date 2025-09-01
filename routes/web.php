@@ -17,12 +17,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('invoices.index');
 
     Route::get('invoices/{invoice}', [InvoiceController::class, 'show'])
+        ->middleware('invoice.owner')
         ->name('invoices.show');
 
     Route::post('invoices/{invoice}/upload-receipt', [InvoiceController::class, 'uploadReceipt'])
+        ->middleware('invoice.owner')
         ->name('invoices.upload-receipt');
 
     Route::get('invoices/{invoice}/receipt', [InvoiceController::class, 'showReceipt'])
+        ->middleware('invoice.owner')
         ->name('invoices.show-receipt');
 });
 
