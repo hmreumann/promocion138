@@ -6,9 +6,9 @@ Hemos recibido un comprobante de pago para el fondo de promoción con los siguie
 - **Nombre:** {{ $invoice->user->name }}
 - **Email:** {{ $invoice->user->email }}
 - **Monto:** ${{ number_format($invoice->amount, 2) }}
-- **Fecha de Factura:** {{ $invoice->invoice_date->format('d/m/Y') }}
-- **Fecha de Vencimiento:** {{ $invoice->due_date->format('d/m/Y') }}
+- **Fecha de Pago:** {{ $invoice->paid_at->setTimezone('America/Argentina/Buenos_Aires')->format('d/m/Y H:i:s') }} (Argentina)
 - **Período de Facturación:** {{ $invoice->billing_period }}
+- **Número de Referencia SMSV:** 1054747110
 
 El comprobante de pago se encuentra adjunto a este correo.
 
