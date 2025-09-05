@@ -261,7 +261,7 @@
 
             let textToCopy = 'Waiting Review Payments:\n\n';
             waitingReviewInvoices.forEach(function(invoice) {
-                textToCopy += invoice.name + ' - $' + (invoice.amount / 100).toFixed(2) + ' - ' + invoice.paid_at + '\n';
+                textToCopy += invoice.name + ' - $' + invoice.amount + ' - ' + invoice.paid_at + '\n';
             });
 
             navigator.clipboard.writeText(textToCopy).then(function() {
