@@ -47,10 +47,19 @@ class InvoiceController extends Controller
         })->values();
 
         // Prepare overdue invoices histogram data (from all filtered invoices)
-        $overdueByUser = $allFilteredInvoices->filter(function ($invoice) {
-            return $invoice->isOverdue() && !$invoice->isWaitingReview();
-        })->groupBy('user_id')->map(function ($userInvoices) {
-            return $userInvoices->count();
+        // First, get all users who have invoices in the filtered set
+        $allUsersInFilter = $allFilteredInvoices->pluck('user_id')->unique();
+
+        // Count overdue invoices per user (including users with 0 overdue)
+        $overdueByUser = $allUsersInFilter->mapWithKeys(function ($userId) use ($allFilteredInvoices) {
+            $userOverdueCount = $allFilteredInvoices
+                ->where('user_id', $userId)
+                ->filter(function ($invoice) {
+                    return $invoice->isOverdue() && ! $invoice->isWaitingReview();
+                })
+                ->count();
+
+            return [$userId => $userOverdueCount];
         });
 
         // Find the maximum count to ensure we have all bins
