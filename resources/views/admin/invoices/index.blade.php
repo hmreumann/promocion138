@@ -73,6 +73,14 @@
                         <div class="bg-orange-50 p-4 rounded-lg">
                             <h3 class="text-lg font-semibold text-orange-800">Waiting Review</h3>
                             <p class="text-2xl font-bold text-orange-600">{{ $invoices->where('status', 'waiting_review')->count() }}</p>
+                            @if($invoices->where('status', 'waiting_review')->count() > 0)
+                                <button 
+                                    onclick="copyWaitingReviewToClipboard()" 
+                                    class="mt-2 px-3 py-1 text-xs bg-orange-600 text-white rounded hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    title="Copy waiting review payments to clipboard">
+                                    Copy Details
+                                </button>
+                            @endif
                         </div>
                         <div class="bg-green-50 p-4 rounded-lg">
                             <h3 class="text-lg font-semibold text-green-800">Paid</h3>
@@ -133,17 +141,21 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                            {{ $invoice->paid_at ? $invoice->paid_at->format('M d, Y H:i') : '-' }}
+                                            <div>
+                                                {{ $invoice->paid_at ? $invoice->paid_at->format('M d, Y H:i') : '-' }}
+                                                @if($invoice->receipt_path)
+                                                    <div class="mt-1">
+                                                        <a href="{{ route('invoices.show-receipt', $invoice) }}" 
+                                                           target="_blank"
+                                                           class="text-blue-600 hover:text-blue-900 text-xs underline">
+                                                            View Receipt
+                                                        </a>
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex flex-wrap gap-2">
-                                                @if($invoice->receipt_path)
-                                                    <a href="{{ route('invoices.show-receipt', $invoice) }}" 
-                                                       target="_blank"
-                                                       class="text-blue-600 hover:text-blue-900 px-3 py-1 rounded bg-blue-50 hover:bg-blue-100">
-                                                        View Receipt
-                                                    </a>
-                                                @endif
                                                 
                                                 @if ($invoice->status === 'pending')
                                                     <form method="POST" action="{{ route('admin.invoices.mark-paid', $invoice) }}" class="inline">
@@ -237,4 +249,33 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function copyWaitingReviewToClipboard() {
+            const waitingReviewInvoices = @json($invoices->where('status', 'waiting_review')->map(function($invoice) {
+                return [
+                    'name' => $invoice->user->name,
+                    'amount' => $invoice->amount,
+                    'paid_at' => $invoice->paid_at ? $invoice->paid_at->format('M d, Y') : 'N/A'
+                ];
+            })->values());
+
+            if (waitingReviewInvoices.length === 0) {
+                alert('No waiting review payments found.');
+                return;
+            }
+
+            let textToCopy = 'Waiting Review Payments:\n\n';
+            waitingReviewInvoices.forEach(function(invoice) {
+                textToCopy += `${invoice.name} - $${(invoice.amount / 100).toFixed(2)} - ${invoice.paid_at}\n`;
+            });
+
+            navigator.clipboard.writeText(textToCopy).then(function() {
+                alert('Payment details copied to clipboard!');
+            }).catch(function(err) {
+                console.error('Failed to copy text: ', err);
+                alert('Failed to copy to clipboard. Please try again.');
+            });
+        }
+    </script>
 </x-app-layout>
