@@ -95,9 +95,9 @@
                     <!-- Overdue Invoices Histogram -->
                     @if($histogramData->sum('user_count') > 0)
                         <div class="p-6 mb-6 bg-white border border-gray-200 rounded-lg shadow-sm">
-                            <h3 class="mb-4 text-lg font-semibold text-gray-900">Distribution of Overdue Invoices</h3>
-                            <p class="mb-4 text-sm text-gray-600">Number of users grouped by how many overdue invoices they have</p>
-                            <div class="w-full h-96">
+                            <h3 class="mb-4 text-lg font-semibold text-gray-900">Distribución de Facturas Vencidas</h3>
+                            <p class="mb-4 text-sm text-gray-600">Cantidad de usuarios agrupados por la cantidad de facturas vencidas que tienen</p>
+                            <div class="w-full h-[28rem]">
                                 <canvas id="overdueHistogram"></canvas>
                             </div>
                         </div>
@@ -292,7 +292,11 @@
                 const histogramData = @json($histogramData);
                 const ctx = document.getElementById('overdueHistogram').getContext('2d');
                 
-                const labels = histogramData.map(item => item.overdue_count + ' overdue invoice' + (item.overdue_count === 1 ? '' : 's'));
+                const labels = histogramData.map(item => {
+                    if (item.overdue_count === 0) return '0 facturas vencidas';
+                    if (item.overdue_count === 1) return '1 factura vencida';
+                    return item.overdue_count + ' facturas vencidas';
+                });
                 const userCounts = histogramData.map(item => item.user_count);
 
                 new Chart(ctx, {
@@ -300,7 +304,7 @@
                     data: {
                         labels: labels,
                         datasets: [{
-                            label: 'Number of Users',
+                            label: 'Cantidad de Usuarios',
                             data: userCounts,
                             backgroundColor: 'rgba(239, 68, 68, 0.8)',
                             borderColor: 'rgba(239, 68, 68, 1)',
@@ -313,7 +317,7 @@
                         plugins: {
                             title: {
                                 display: true,
-                                text: 'Distribution of Overdue Invoices'
+                                text: 'Distribución de Facturas Vencidas'
                             },
                             legend: {
                                 display: false
@@ -324,14 +328,14 @@
                                 display: true,
                                 title: {
                                     display: true,
-                                    text: 'Number of Overdue Invoices'
+                                    text: 'Cantidad de Facturas Vencidas'
                                 }
                             },
                             y: {
                                 display: true,
                                 title: {
                                     display: true,
-                                    text: 'Number of Users'
+                                    text: 'Cantidad de Usuarios'
                                 },
                                 beginAtZero: true,
                                 ticks: {
