@@ -48,7 +48,7 @@ class InvoiceController extends Controller
 
         // Prepare overdue invoices histogram data (from all filtered invoices)
         $overdueByUser = $allFilteredInvoices->filter(function ($invoice) {
-            return $invoice->isOverdue();
+            return $invoice->isOverdue() && !$invoice->isWaitingReview();
         })->groupBy('user_id')->map(function ($userInvoices) {
             return $userInvoices->count();
         });
