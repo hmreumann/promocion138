@@ -1,34 +1,34 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="text-xl font-semibold leading-tight text-gray-800">
             {{ __('Admin - Invoice Management') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <!-- Flash Messages -->
                     @if (session('success'))
-                        <div class="mb-4 px-4 py-2 bg-green-100 border-l-4 border-green-500 text-green-700">
+                        <div class="px-4 py-2 mb-4 text-green-700 bg-green-100 border-l-4 border-green-500">
                             {{ session('success') }}
                         </div>
                     @endif
 
                     <!-- Filters -->
-                    <div class="mb-6 bg-gray-50 p-4 rounded-lg">
-                        <form method="GET" class="flex flex-wrap gap-4 items-end">
+                    <div class="p-4 mb-6 rounded-lg bg-gray-50">
+                        <form method="GET" class="flex flex-wrap items-end gap-4">
                             <div class="flex-1 min-w-64">
                                 <label for="search" class="block text-sm font-medium text-gray-700">Search User</label>
-                                <input type="text" name="search" id="search" value="{{ request('search') }}" 
-                                       placeholder="Search by name or email" 
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <input type="text" name="search" id="search" value="{{ request('search') }}"
+                                       placeholder="Search by name or email"
+                                       class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                             </div>
-                            
+
                             <div>
                                 <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                                <select name="status" id="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <select name="status" id="status" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                     <option value="">All Statuses</option>
                                     <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
                                     <option value="waiting_review" {{ request('status') === 'waiting_review' ? 'selected' : '' }}>Waiting Review</option>
@@ -36,10 +36,10 @@
                                     <option value="overdue" {{ request('status') === 'overdue' ? 'selected' : '' }}>Overdue</option>
                                 </select>
                             </div>
-                            
+
                             <div>
                                 <label for="user_id" class="block text-sm font-medium text-gray-700">User</label>
-                                <select name="user_id" id="user_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <select name="user_id" id="user_id" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                     <option value="">All Users</option>
                                     @foreach ($users as $user)
                                         <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>
@@ -48,12 +48,12 @@
                                     @endforeach
                                 </select>
                             </div>
-                            
+
                             <div class="flex gap-2">
-                                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <button type="submit" class="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                                     Filter
                                 </button>
-                                <a href="{{ route('admin.invoices.index') }}" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                                <a href="{{ route('admin.invoices.index') }}" class="px-4 py-2 text-white bg-gray-600 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">
                                     Clear
                                 </a>
                             </div>
@@ -61,32 +61,32 @@
                     </div>
 
                     <!-- Invoice Stats -->
-                    <div class="mb-6 grid grid-cols-1 md:grid-cols-5 gap-4">
-                        <div class="bg-blue-50 p-4 rounded-lg">
+                    <div class="grid grid-cols-1 gap-4 mb-6 md:grid-cols-5">
+                        <div class="p-4 rounded-lg bg-blue-50">
                             <h3 class="text-lg font-semibold text-blue-800">Total Invoices</h3>
                             <p class="text-2xl font-bold text-blue-600">{{ $invoices->total() }}</p>
                         </div>
-                        <div class="bg-yellow-50 p-4 rounded-lg">
+                        <div class="p-4 rounded-lg bg-yellow-50">
                             <h3 class="text-lg font-semibold text-yellow-800">Pending</h3>
                             <p class="text-2xl font-bold text-yellow-600">{{ $invoices->where('status', 'pending')->count() }}</p>
                         </div>
-                        <div class="bg-orange-50 p-4 rounded-lg">
+                        <div class="p-4 rounded-lg bg-orange-50">
                             <h3 class="text-lg font-semibold text-orange-800">Waiting Review</h3>
                             <p class="text-2xl font-bold text-orange-600">{{ $invoices->where('status', 'waiting_review')->count() }}</p>
                             @if($invoices->where('status', 'waiting_review')->count() > 0)
-                                <button 
-                                    onclick="copyWaitingReviewToClipboard()" 
-                                    class="mt-2 px-3 py-1 text-xs bg-orange-600 text-white rounded hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                <button
+                                    onclick="copyWaitingReviewToClipboard()"
+                                    class="px-3 py-1 mt-2 text-xs text-white bg-orange-600 rounded hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
                                     title="Copy waiting review payments to clipboard">
                                     Copy Details
                                 </button>
                             @endif
                         </div>
-                        <div class="bg-green-50 p-4 rounded-lg">
+                        <div class="p-4 rounded-lg bg-green-50">
                             <h3 class="text-lg font-semibold text-green-800">Paid</h3>
                             <p class="text-2xl font-bold text-green-600">{{ $invoices->where('status', 'paid')->count() }}</p>
                         </div>
-                        <div class="bg-red-50 p-4 rounded-lg">
+                        <div class="p-4 rounded-lg bg-red-50">
                             <h3 class="text-lg font-semibold text-red-800">Overdue</h3>
                             <p class="text-2xl font-bold text-red-600">{{ $invoices->filter(fn($invoice) => $invoice->isOverdue())->count() }}</p>
                         </div>
@@ -97,13 +97,13 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Period</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Paid At</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">User</th>
+                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Amount</th>
+                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Period</th>
+                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Due Date</th>
+                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Status</th>
+                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Paid At</th>
+                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -115,54 +115,54 @@
                                                 <div class="text-sm text-gray-500">{{ $invoice->user->email }}</div>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                                             ${{ number_format($invoice->amount, 2) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                                             {{ $invoice->billing_period }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                                             {{ $invoice->due_date->format('M d, Y') }}
                                             @if ($invoice->isOverdue())
-                                                <span class="ml-2 px-2 py-1 text-xs font-semibold text-red-800 bg-red-100 rounded-full">Overdue</span>
+                                                <span class="px-2 py-1 ml-2 text-xs font-semibold text-red-800 bg-red-100 rounded-full">Overdue</span>
                                             @endif
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                                                 @if($invoice->status === 'paid') bg-green-100 text-green-800
                                                 @elseif($invoice->status === 'pending') bg-yellow-100 text-yellow-800
                                                 @elseif($invoice->status === 'waiting_review') bg-orange-100 text-orange-800
                                                 @else bg-red-100 text-red-800 @endif">
-                                                @if($invoice->status === 'waiting_review') 
+                                                @if($invoice->status === 'waiting_review')
                                                     Waiting Review
-                                                @else 
+                                                @else
                                                     {{ ucfirst($invoice->status) }}
                                                 @endif
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                                             <div>
                                                 {{ $invoice->paid_at ? $invoice->paid_at->format('M d, Y H:i') : '-' }}
                                                 @if($invoice->receipt_path)
                                                     <div class="mt-1">
-                                                        <a href="{{ route('invoices.show-receipt', $invoice) }}" 
+                                                        <a href="{{ route('invoices.show-receipt', $invoice) }}"
                                                            target="_blank"
-                                                           class="text-blue-600 hover:text-blue-900 text-xs underline">
+                                                           class="text-xs text-blue-600 underline hover:text-blue-900">
                                                             View Receipt
                                                         </a>
                                                     </div>
                                                 @endif
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
                                             <div class="flex flex-wrap gap-2">
-                                                
+
                                                 @if ($invoice->status === 'pending')
                                                     <form method="POST" action="{{ route('admin.invoices.mark-paid', $invoice) }}" class="inline">
                                                         @csrf
                                                         @method('PATCH')
-                                                        <button type="submit" 
-                                                                class="text-green-600 hover:text-green-900 px-3 py-1 rounded bg-green-50 hover:bg-green-100"
+                                                        <button type="submit"
+                                                                class="px-3 py-1 text-green-600 rounded hover:text-green-900 bg-green-50 hover:bg-green-100"
                                                                 onclick="return confirm('Mark this invoice as paid?')">
                                                             Mark Paid
                                                         </button>
@@ -170,8 +170,8 @@
                                                     <form method="POST" action="{{ route('admin.invoices.mark-waiting-review', $invoice) }}" class="inline">
                                                         @csrf
                                                         @method('PATCH')
-                                                        <button type="submit" 
-                                                                class="text-orange-600 hover:text-orange-900 px-3 py-1 rounded bg-orange-50 hover:bg-orange-100"
+                                                        <button type="submit"
+                                                                class="px-3 py-1 text-orange-600 rounded hover:text-orange-900 bg-orange-50 hover:bg-orange-100"
                                                                 onclick="return confirm('Mark this invoice as waiting review?')">
                                                             Mark Waiting Review
                                                         </button>
@@ -180,8 +180,8 @@
                                                     <form method="POST" action="{{ route('admin.invoices.mark-paid', $invoice) }}" class="inline">
                                                         @csrf
                                                         @method('PATCH')
-                                                        <button type="submit" 
-                                                                class="text-green-600 hover:text-green-900 px-3 py-1 rounded bg-green-50 hover:bg-green-100"
+                                                        <button type="submit"
+                                                                class="px-3 py-1 text-green-600 rounded hover:text-green-900 bg-green-50 hover:bg-green-100"
                                                                 onclick="return confirm('Approve and mark this invoice as paid?')">
                                                             Approve & Mark Paid
                                                         </button>
@@ -189,8 +189,8 @@
                                                     <form method="POST" action="{{ route('admin.invoices.mark-pending', $invoice) }}" class="inline">
                                                         @csrf
                                                         @method('PATCH')
-                                                        <button type="submit" 
-                                                                class="text-yellow-600 hover:text-yellow-900 px-3 py-1 rounded bg-yellow-50 hover:bg-yellow-100"
+                                                        <button type="submit"
+                                                                class="px-3 py-1 text-yellow-600 rounded hover:text-yellow-900 bg-yellow-50 hover:bg-yellow-100"
                                                                 onclick="return confirm('Reject and mark this invoice as pending?')">
                                                             Reject
                                                         </button>
@@ -199,8 +199,8 @@
                                                     <form method="POST" action="{{ route('admin.invoices.mark-pending', $invoice) }}" class="inline">
                                                         @csrf
                                                         @method('PATCH')
-                                                        <button type="submit" 
-                                                                class="text-yellow-600 hover:text-yellow-900 px-3 py-1 rounded bg-yellow-50 hover:bg-yellow-100"
+                                                        <button type="submit"
+                                                                class="px-3 py-1 text-yellow-600 rounded hover:text-yellow-900 bg-yellow-50 hover:bg-yellow-100"
                                                                 onclick="return confirm('Mark this invoice as pending?')">
                                                             Mark Pending
                                                         </button>
@@ -209,20 +209,20 @@
                                                         <form method="POST" action="{{ route('admin.invoices.mark-waiting-review', $invoice) }}" class="inline">
                                                             @csrf
                                                             @method('PATCH')
-                                                            <button type="submit" 
-                                                                    class="text-orange-600 hover:text-orange-900 px-3 py-1 rounded bg-orange-50 hover:bg-orange-100"
+                                                            <button type="submit"
+                                                                    class="px-3 py-1 text-orange-600 rounded hover:text-orange-900 bg-orange-50 hover:bg-orange-100"
                                                                     onclick="return confirm('Mark this invoice as waiting review?')">
                                                                 Mark Waiting Review
                                                             </button>
                                                         </form>
                                                     @endif
                                                 @endif
-                                                
+
                                                 <form method="POST" action="{{ route('admin.invoices.destroy', $invoice) }}" class="inline">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" 
-                                                            class="text-red-600 hover:text-red-900 px-3 py-1 rounded bg-red-50 hover:bg-red-100"
+                                                    <button type="submit"
+                                                            class="px-3 py-1 text-red-600 rounded hover:text-red-900 bg-red-50 hover:bg-red-100"
                                                             onclick="return confirm('Are you sure you want to delete this invoice? This action cannot be undone.')">
                                                         Delete
                                                     </button>
@@ -252,13 +252,7 @@
 
     <script>
         function copyWaitingReviewToClipboard() {
-            const waitingReviewInvoices = @json($invoices->where('status', 'waiting_review')->map(function($invoice) {
-                return [
-                    'name' => $invoice->user->name,
-                    'amount' => $invoice->amount,
-                    'paid_at' => $invoice->paid_at ? $invoice->paid_at->format('M d, Y') : 'N/A'
-                ];
-            })->values());
+            const waitingReviewInvoices = @json($invoices->where('status', 'waiting_review')->map(function($invoice) { return [ 'name' => $invoice->user->name, 'amount' => $invoice->amount, 'paid_at' => $invoice->paid_at ? $invoice->paid_at->format('M d, Y') : 'N/A' ]; })->values());
 
             if (waitingReviewInvoices.length === 0) {
                 alert('No waiting review payments found.');
