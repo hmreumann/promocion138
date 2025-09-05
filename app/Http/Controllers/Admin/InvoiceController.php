@@ -42,7 +42,30 @@ class InvoiceController extends Controller
             ];
         })->values();
 
-        return view('admin.invoices.index', compact('invoices', 'users', 'waitingReviewPayments'));
+        // Prepare overdue invoices histogram data
+        $overdueByUser = $invoices->filter(function ($invoice) {
+            return $invoice->isOverdue();
+        })->groupBy('user_id')->map(function ($userInvoices) {
+            return $userInvoices->count();
+        });
+
+        // Find the maximum count to ensure we have all bins
+        $maxCount = $overdueByUser->count() > 0 ? $overdueByUser->max() : 0;
+
+        // Create histogram bins (0 to max count)
+        $histogramData = collect();
+        for ($i = 0; $i <= $maxCount; $i++) {
+            $usersWithThisCount = $overdueByUser->filter(function ($count) use ($i) {
+                return $count === $i;
+            })->count();
+
+            $histogramData->push([
+                'overdue_count' => $i,
+                'user_count' => $usersWithThisCount,
+            ]);
+        }
+
+        return view('admin.invoices.index', compact('invoices', 'users', 'waitingReviewPayments', 'histogramData'));
     }
 
     public function markAsPaid(Invoice $invoice): RedirectResponse
