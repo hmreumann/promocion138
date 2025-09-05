@@ -30,11 +30,15 @@ class InvoiceController extends Controller
             });
         }
 
+        // Get all filtered invoices for stats and charts (not paginated)
+        $allFilteredInvoices = $query->orderBy('created_at', 'desc')->get();
+
+        // Get paginated invoices for the table
         $invoices = $query->orderBy('created_at', 'desc')->paginate(20);
         $users = User::orderBy('name')->get();
 
-        // Prepare waiting review data for clipboard functionality
-        $waitingReviewPayments = $invoices->where('status', 'waiting_review')->map(function ($invoice) {
+        // Prepare waiting review data for clipboard functionality (from all filtered invoices)
+        $waitingReviewPayments = $allFilteredInvoices->where('status', 'waiting_review')->map(function ($invoice) {
             return [
                 'name' => $invoice->user->name,
                 'amount' => $invoice->amount,
@@ -42,8 +46,8 @@ class InvoiceController extends Controller
             ];
         })->values();
 
-        // Prepare overdue invoices histogram data
-        $overdueByUser = $invoices->filter(function ($invoice) {
+        // Prepare overdue invoices histogram data (from all filtered invoices)
+        $overdueByUser = $allFilteredInvoices->filter(function ($invoice) {
             return $invoice->isOverdue();
         })->groupBy('user_id')->map(function ($userInvoices) {
             return $userInvoices->count();
@@ -65,7 +69,7 @@ class InvoiceController extends Controller
             ]);
         }
 
-        return view('admin.invoices.index', compact('invoices', 'users', 'waitingReviewPayments', 'histogramData'));
+        return view('admin.invoices.index', compact('invoices', 'allFilteredInvoices', 'users', 'waitingReviewPayments', 'histogramData'));
     }
 
     public function markAsPaid(Invoice $invoice): RedirectResponse

@@ -64,16 +64,16 @@
                     <div class="grid grid-cols-1 gap-4 mb-6 md:grid-cols-5">
                         <div class="p-4 rounded-lg bg-blue-50">
                             <h3 class="text-lg font-semibold text-blue-800">Total Invoices</h3>
-                            <p class="text-2xl font-bold text-blue-600">{{ $invoices->total() }}</p>
+                            <p class="text-2xl font-bold text-blue-600">{{ $allFilteredInvoices->count() }}</p>
                         </div>
                         <div class="p-4 rounded-lg bg-yellow-50">
                             <h3 class="text-lg font-semibold text-yellow-800">Pending</h3>
-                            <p class="text-2xl font-bold text-yellow-600">{{ $invoices->where('status', 'pending')->count() }}</p>
+                            <p class="text-2xl font-bold text-yellow-600">{{ $allFilteredInvoices->where('status', 'pending')->count() }}</p>
                         </div>
                         <div class="p-4 rounded-lg bg-orange-50">
                             <h3 class="text-lg font-semibold text-orange-800">Waiting Review</h3>
-                            <p class="text-2xl font-bold text-orange-600">{{ $invoices->where('status', 'waiting_review')->count() }}</p>
-                            @if($invoices->where('status', 'waiting_review')->count() > 0)
+                            <p class="text-2xl font-bold text-orange-600">{{ $allFilteredInvoices->where('status', 'waiting_review')->count() }}</p>
+                            @if($allFilteredInvoices->where('status', 'waiting_review')->count() > 0)
                                 <button
                                     onclick="copyWaitingReviewToClipboard()"
                                     class="px-3 py-1 mt-2 text-xs text-white bg-orange-600 rounded hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -84,11 +84,11 @@
                         </div>
                         <div class="p-4 rounded-lg bg-green-50">
                             <h3 class="text-lg font-semibold text-green-800">Paid</h3>
-                            <p class="text-2xl font-bold text-green-600">{{ $invoices->where('status', 'paid')->count() }}</p>
+                            <p class="text-2xl font-bold text-green-600">{{ $allFilteredInvoices->where('status', 'paid')->count() }}</p>
                         </div>
                         <div class="p-4 rounded-lg bg-red-50">
                             <h3 class="text-lg font-semibold text-red-800">Overdue</h3>
-                            <p class="text-2xl font-bold text-red-600">{{ $invoices->filter(fn($invoice) => $invoice->isOverdue())->count() }}</p>
+                            <p class="text-2xl font-bold text-red-600">{{ $allFilteredInvoices->filter(fn($invoice) => $invoice->isOverdue())->count() }}</p>
                         </div>
                     </div>
 
