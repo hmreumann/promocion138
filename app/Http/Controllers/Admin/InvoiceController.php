@@ -33,7 +33,16 @@ class InvoiceController extends Controller
         $invoices = $query->orderBy('created_at', 'desc')->paginate(20);
         $users = User::orderBy('name')->get();
 
-        return view('admin.invoices.index', compact('invoices', 'users'));
+        // Prepare waiting review data for clipboard functionality
+        $waitingReviewPayments = $invoices->where('status', 'waiting_review')->map(function ($invoice) {
+            return [
+                'name' => $invoice->user->name,
+                'amount' => $invoice->amount,
+                'paid_at' => $invoice->paid_at ? $invoice->paid_at->format('M d, Y') : 'N/A',
+            ];
+        })->values();
+
+        return view('admin.invoices.index', compact('invoices', 'users', 'waitingReviewPayments'));
     }
 
     public function markAsPaid(Invoice $invoice): RedirectResponse
