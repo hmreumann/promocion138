@@ -252,13 +252,15 @@
 
     <script>
         function copyWaitingReviewToClipboard() {
-            const waitingReviewInvoices = @json($invoices->where('status', 'waiting_review')->map(function($invoice) { 
-                return [
-                    'name' => $invoice->user->name, 
-                    'amount' => $invoice->amount, 
-                    'paid_at' => $invoice->paid_at ? $invoice->paid_at->format('M d, Y') : 'N/A'
-                ]; 
-            })->values());
+            const waitingReviewInvoices = @json(
+                $invoices->where('status', 'waiting_review')->map(function($invoice) { 
+                    return [
+                        'name' => $invoice->user->name, 
+                        'amount' => $invoice->amount, 
+                        'paid_at' => $invoice->paid_at ? $invoice->paid_at->format('M d, Y') : 'N/A'
+                    ]; 
+                })->values()
+            );
 
             if (waitingReviewInvoices.length === 0) {
                 alert('No waiting review payments found.');
