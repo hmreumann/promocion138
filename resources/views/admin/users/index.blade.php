@@ -99,15 +99,22 @@
                                             {{ $user->cents ?? '-' }}
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                                            @if($user->invoices_count > 0)
-                                                <a href="{{ route('admin.invoices.index', ['user_id' => $user->id]) }}"
-                                                   class="text-blue-600 underline hover:text-blue-900"
-                                                   title="View invoices for {{ $user->name }}">
+                                            <div>
+                                                @if($user->invoices_count > 0)
+                                                    <a href="{{ route('admin.invoices.index', ['user_id' => $user->id]) }}"
+                                                       class="text-blue-600 underline hover:text-blue-900"
+                                                       title="View invoices for {{ $user->name }}">
+                                                        {{ $user->invoices_count }}
+                                                    </a>
+                                                @else
                                                     {{ $user->invoices_count }}
-                                                </a>
-                                            @else
-                                                {{ $user->invoices_count }}
-                                            @endif
+                                                @endif
+                                                @if($user->overdue_invoices_count > 0)
+                                                    <span class="inline-flex items-center px-2 py-0.5 ml-2 text-xs font-semibold text-red-800 bg-red-100 rounded-full">
+                                                        {{ $user->overdue_invoices_count }} overdue
+                                                    </span>
+                                                @endif
+                                            </div>
                                         </td>
                                         <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
                                             <div class="flex flex-wrap gap-2">

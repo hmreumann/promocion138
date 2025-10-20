@@ -32,7 +32,13 @@ class UserController extends Controller
             $query->where('payment_method', $request->payment_method);
         }
 
-        $users = $query->withCount('invoices')->orderBy('name')->paginate(20);
+        $users = $query->withCount([
+            'invoices',
+            'invoices as overdue_invoices_count' => function ($query) {
+                $query->whereIn('status', ['pending', 'waiting_review'])
+                    ->where('due_date', '<', now()->toDateString());
+            },
+        ])->orderBy('name')->paginate(20);
 
         return view('admin.users.index', compact('users'));
     }

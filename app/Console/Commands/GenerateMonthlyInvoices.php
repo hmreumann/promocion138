@@ -77,7 +77,7 @@ class GenerateMonthlyInvoices extends Command
                 'user_id' => $user->id,
                 'amount' => $amount,
                 'invoice_date' => $invoiceDate->toDateString(),
-                'due_date' => $invoiceDate->copy()->addDays(30)->toDateString(),
+                'due_date' => $invoiceDate->copy()->addDays(10)->toDateString(),
                 'status' => 'pending',
                 'billing_period' => $billingPeriod,
                 'description' => 'Cuota mensual Promoción 138 - '.$invoiceDate->format('F Y'),
@@ -143,7 +143,7 @@ class GenerateMonthlyInvoices extends Command
             'user_id' => $user->id,
             'amount' => $amount,
             'invoice_date' => $invoiceDate->toDateString(),
-            'due_date' => $invoiceDate->copy()->addDays(30)->toDateString(),
+            'due_date' => $invoiceDate->copy()->addDays(10)->toDateString(),
             'status' => 'pending',
             'billing_period' => $billingPeriod,
             'description' => 'Cuota mensual Promoción 138 - '.$invoiceDate->format('F Y'),
@@ -168,6 +168,6 @@ class GenerateMonthlyInvoices extends Command
             default => 27000.00,
         };
 
-        return $amount + $cents/100;
+        return $amount + $cents / 100;
     }
 }
