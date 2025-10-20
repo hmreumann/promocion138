@@ -44,6 +44,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::delete('invoices/{invoice}', [AdminInvoiceController::class, 'destroy'])
         ->name('invoices.destroy');
+
+    Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
 });
 
 require __DIR__.'/auth.php';

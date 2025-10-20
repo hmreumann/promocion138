@@ -38,13 +38,14 @@ class NotifyPendingInvoices extends Command
             return self::SUCCESS;
         }
 
-        // Get all users with pending invoices
-        $usersWithPendingInvoices = User::whereHas('invoices', function ($query) {
-            $query->whereIn('status', ['pending']);
-        })->with(['invoices' => function ($query) {
-            $query->whereIn('status', ['pending'])
-                ->orderBy('due_date', 'asc');
-        }])->get();
+        // Get all active users with pending invoices
+        $usersWithPendingInvoices = User::where('active', true)
+            ->whereHas('invoices', function ($query) {
+                $query->whereIn('status', ['pending']);
+            })->with(['invoices' => function ($query) {
+                $query->whereIn('status', ['pending'])
+                    ->orderBy('due_date', 'asc');
+            }])->get();
 
         if ($usersWithPendingInvoices->isEmpty()) {
             $this->info('No users with pending invoices found.');

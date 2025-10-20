@@ -130,7 +130,12 @@
                                             ${{ number_format($invoice->amount, 2) }}
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                                            {{ $invoice->billing_period }}
+                                            <a href="{{ route('invoices.show', $invoice) }}"
+                                               target="_blank"
+                                               class="text-blue-600 underline hover:text-blue-900"
+                                               title="View invoice details">
+                                                {{ $invoice->billing_period }}
+                                            </a>
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                                             {{ $invoice->due_date->format('M d, Y') }}
