@@ -40,9 +40,12 @@ new class extends Component
                         <x-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.*')" wire:navigate>
                             {{ __('Mis Facturas') }}
                         </x-nav-link>
-                        @if(auth()->user()->email === 'hmreumann@hotmail.com')
+                        @if(in_array(auth()->user()->email, config('admins.emails')))
                             <x-nav-link :href="route('admin.invoices.index')" :active="request()->routeIs('admin.invoices.*')" wire:navigate>
                                 {{ __('Admin Invoices') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')" wire:navigate>
+                                {{ __('Admin Users') }}
                             </x-nav-link>
                         @endif
                     @else
@@ -113,9 +116,12 @@ new class extends Component
                 <x-responsive-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.*')" wire:navigate>
                     {{ __('Mis Facturas') }}
                 </x-responsive-nav-link>
-                @if(auth()->user()->email === 'hmreumann@hotmail.com')
+                @if(in_array(auth()->user()->email, config('admins.emails')))
                     <x-responsive-nav-link :href="route('admin.invoices.index')" :active="request()->routeIs('admin.invoices.*')" wire:navigate>
                         {{ __('Admin Invoices') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')" wire:navigate>
+                        {{ __('Admin Users') }}
                     </x-responsive-nav-link>
                 @endif
             @else
