@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 class UserFactory extends Factory
 {
@@ -28,6 +29,7 @@ class UserFactory extends Factory
             'active' => fake()->boolean(70), // 70% chance of being active
             'payment_method' => fake()->randomElement(['smsv', 'bank', 'cash', null]),
             'plan' => fake()->randomElement(['full', 'basic', null]),
+            'email_verified_at' => now(),
         ];
     }
 
