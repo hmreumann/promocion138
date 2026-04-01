@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\InvoiceController as AdminInvoiceController;
+use App\Http\Controllers\Admin\PollController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\InvoiceController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,7 +47,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('invoices/{invoice}', [AdminInvoiceController::class, 'destroy'])
         ->name('invoices.destroy');
 
-    Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+    Route::resource('users', UserController::class);
+
+    Route::resource('polls', PollController::class);
+    Route::post('polls/{poll}/publish', [PollController::class, 'publish'])
+        ->name('polls.publish');
+    Route::get('polls/{poll}/results', [PollController::class, 'results'])
+        ->name('polls.results');
 });
 
 require __DIR__.'/auth.php';
