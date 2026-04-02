@@ -162,11 +162,7 @@ class GenerateMonthlyInvoices extends Command
 
     private function calculateAmount(string $plan, ?float $cents = 0): float
     {
-        $amount = match ($plan) {
-            'full' => 30000.00,
-            'basic' => 12000.00,
-            default => 30000.00,
-        };
+        $amount = config("invoices.plan_amounts.{$plan}", config('invoices.plan_amounts.full'));
 
         return $amount + $cents / 100;
     }

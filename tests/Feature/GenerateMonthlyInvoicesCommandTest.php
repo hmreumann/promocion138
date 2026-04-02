@@ -61,8 +61,8 @@ it('sets correct amounts based on plan type', function () {
     $fullPlanInvoice = Invoice::where('user_id', $this->transferFullUser->id)->first();
     $basicPlanInvoice = Invoice::where('user_id', $this->transferBasicUser->id)->first();
 
-    expect($fullPlanInvoice->amount)->toBe('27000.00');
-    expect($basicPlanInvoice->amount)->toBe('10800.00');
+    expect($fullPlanInvoice->amount)->toBe(number_format(config('invoices.plan_amounts.full'), 2, '.', ''));
+    expect($basicPlanInvoice->amount)->toBe(number_format(config('invoices.plan_amounts.basic'), 2, '.', ''));
 });
 
 it('sets correct dates and billing period', function () {

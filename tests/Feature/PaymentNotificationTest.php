@@ -42,8 +42,8 @@ it('sends a notification when a receipt is uploaded for a pending invoice', func
     // check that mail was sent to the user and the two extra recipients
     Mail::assertSent(PaymentNotification::class, function ($mail) use ($invoice, $user) {
         return $mail->hasTo($user->email)
-            && $mail->hasTo('cuentascorrientesrrbb@smsv.com.ar')
-            && $mail->hasTo('promociones@smsv.com.ar')
+            && $mail->hasCc('cuentascorrientesrrbb@smsv.com.ar')
+            && $mail->hasCc('promociones@smsv.com.ar')
             && $mail->invoice->is($invoice);
     });
 });
